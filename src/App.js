@@ -28,6 +28,7 @@ class App extends Component {
     items: [],
     filter: "",
     open: false,
+    shadow: 1,
   };
 
   filterSearch() {
@@ -51,6 +52,14 @@ class App extends Component {
 
   closeModal = () => {
     this.setState({ open: false });
+  };
+
+  hover = () => {
+    this.setState({ shadow: 3 });
+  };
+
+  exitHover = () => {
+    this.setState({ shadow: 1 });
   };
 
   componentDidMount() {
@@ -159,7 +168,9 @@ class App extends Component {
                           borderRadius: 20,
                           backgroundColor: "#F0F0F0",
                         }}
-                        boxShadow={3}
+                        boxShadow={this.state.shadow}
+                        onMouseEnter={this.hover}
+                        onMouseLeave={this.exitHover}
                         onClick={this.openModal}
                       >
                         <Modal
@@ -186,7 +197,7 @@ class App extends Component {
                               {item.name.first} {item.name.last}
                             </Typography>
                             <Typography
-                              style={{ textAlign: "center", fontSize: 30 }}
+                              style={{ textAlign: "center", fontSize: 20 }}
                             >
                               Birthday: {item.dob.date}
                             </Typography>
