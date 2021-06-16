@@ -18,9 +18,12 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    color: "#F0F0F0",
   },
   title: {
     flexGrow: 1,
+    fontSize: 28,
+    color: "#F0F0F0",
   },
 }));
 
@@ -44,7 +47,7 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" style={{ backgroundColor: "#2A628F" }}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             Employee Directory
