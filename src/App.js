@@ -10,6 +10,8 @@ import {
   Typography,
   SvgIcon,
   Modal,
+  Box,
+  Fade,
 } from "@material-ui/core";
 import React, { Component, useEffect } from "react";
 import Header from "../src/components/header";
@@ -102,26 +104,111 @@ class App extends Component {
                 this.setState({ filter: "" });
               }}
             ></SearchBar>
-            <GridList
-              className={classes.root}
-              cellHeight="auto"
-              cols={5}
-              spacing={5}
-              style={{ alignItems: "center", justifyContent: "center" }}
+            <Fade
+              in={!this.state.loading}
+              {...(!this.state.loading ? { timeout: 1000 } : {})}
             >
-              {this.state.filter
-                ? this.filterSearch().length == 0
-                  ? this.renderNoMatch()
-                  : this.filterSearch().map((item) => (
-                      <Card
+              <GridList
+                className={classes.root}
+                cellHeight="auto"
+                cols={5}
+                spacing={5}
+                style={{ alignItems: "center", justifyContent: "center" }}
+              >
+                {this.state.filter
+                  ? this.filterSearch().length == 0
+                    ? this.renderNoMatch()
+                    : this.filterSearch().map((item) => (
+                        <Card
+                          style={{
+                            flexDirection: "row",
+                            padding: 20,
+                            margin: 10,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div>
+                            <Avatar style={{ width: 100, height: 100 }}>
+                              <img src={item.picture.large} />
+                            </Avatar>
+                          </div>
+                          <div
+                            style={{ flexDirection: "column", paddingLeft: 10 }}
+                          >
+                            <Typography style={{ fontSize: 20 }}>
+                              {item.name.first} {item.name.last}
+                            </Typography>
+                            <Typography style={{ fontSize: 12 }}>
+                              {item.location.city}, {item.location.state}
+                            </Typography>
+                            <Typography style={{ fontSize: 12 }}>
+                              {item.email}
+                            </Typography>
+                          </div>
+                        </Card>
+                      ))
+                  : this.state.items.map((item) => (
+                      <Box
                         style={{
                           flexDirection: "row",
                           padding: 20,
                           margin: 10,
                           justifyContent: "center",
                           alignItems: "center",
+                          borderRadius: 20,
+                          backgroundColor: "#F0F0F0",
                         }}
+                        boxShadow={3}
+                        onClick={this.openModal}
                       >
+                        <Modal
+                          style={{ maxWidth: 500, outline: 0 }}
+                          open={this.state.open}
+                          onClose={this.closeModal}
+                        >
+                          <Card
+                            style={{
+                              maxWidth: 500,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              backgroundColor: "#F0F0F0",
+                              borderRadius: 20,
+                              padding: 20,
+                            }}
+                          >
+                            <Avatar style={{ width: 100, height: 100 }}>
+                              <img src={item.picture.large} />
+                            </Avatar>
+                            <Typography
+                              style={{ textAlign: "center", fontSize: 30 }}
+                            >
+                              {item.name.first} {item.name.last}
+                            </Typography>
+                            <Typography
+                              style={{ textAlign: "center", fontSize: 30 }}
+                            >
+                              Birthday: {item.dob.date}
+                            </Typography>
+                            <Typography
+                              style={{ textAlign: "center", fontSize: 20 }}
+                            >
+                              {item.email}
+                            </Typography>
+                            <Typography
+                              style={{ textAlign: "center", fontSize: 20 }}
+                            >
+                              {item.cell}
+                            </Typography>
+                            <Typography
+                              style={{ textAlign: "center", fontSize: 20 }}
+                            >
+                              {item.location.street.number}{" "}
+                              {item.location.street.name}, {item.location.city},{" "}
+                              {item.location.state}, {item.location.postcode}
+                            </Typography>
+                          </Card>
+                        </Modal>
                         <div>
                           <Avatar style={{ width: 100, height: 100 }}>
                             <img src={item.picture.large} />
@@ -140,87 +227,10 @@ class App extends Component {
                             {item.email}
                           </Typography>
                         </div>
-                      </Card>
-                    ))
-                : this.state.items.map((item) => (
-                    <Card
-                      style={{
-                        flexDirection: "row",
-                        padding: 20,
-                        margin: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: 20,
-                        backgroundColor: "#F0F0F0",
-                      }}
-                      onClick={this.openModal}
-                    >
-                      <Modal
-                        style={{ maxWidth: 500, outline: 0 }}
-                        open={this.state.open}
-                        onClose={this.closeModal}
-                      >
-                        <Card
-                          style={{
-                            maxWidth: 500,
-                            justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: "#F0F0F0",
-                            borderRadius: 20,
-                            padding: 20,
-                          }}
-                        >
-                          <Avatar style={{ width: 100, height: 100 }}>
-                            <img src={item.picture.large} />
-                          </Avatar>
-                          <Typography
-                            style={{ textAlign: "center", fontSize: 30 }}
-                          >
-                            {item.name.first} {item.name.last}
-                          </Typography>
-                          <Typography
-                            style={{ textAlign: "center", fontSize: 30 }}
-                          >
-                            Birthday: {item.dob.date}
-                          </Typography>
-                          <Typography
-                            style={{ textAlign: "center", fontSize: 20 }}
-                          >
-                            {item.email}
-                          </Typography>
-                          <Typography
-                            style={{ textAlign: "center", fontSize: 20 }}
-                          >
-                            {item.cell}
-                          </Typography>
-                          <Typography
-                            style={{ textAlign: "center", fontSize: 20 }}
-                          >
-                            {item.location.street.number}{" "}
-                            {item.location.street.name}, {item.location.city},{" "}
-                            {item.location.state}, {item.location.postcode}
-                          </Typography>
-                        </Card>
-                      </Modal>
-                      <div>
-                        <Avatar style={{ width: 100, height: 100 }}>
-                          <img src={item.picture.large} />
-                        </Avatar>
-                      </div>
-                      <div style={{ flexDirection: "column", paddingLeft: 10 }}>
-                        <Typography style={{ fontSize: 20 }}>
-                          {item.name.first} {item.name.last}
-                        </Typography>
-                        <Typography style={{ fontSize: 12 }}>
-                          {item.location.city}, {item.location.state}
-                        </Typography>
-                        <Typography style={{ fontSize: 12 }}>
-                          {item.email}
-                        </Typography>
-                      </div>
-                    </Card>
-                  ))}
-            </GridList>
+                      </Box>
+                    ))}
+              </GridList>
+            </Fade>
           </div>
         )}
       </div>
