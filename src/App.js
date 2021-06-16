@@ -74,6 +74,9 @@ class App extends Component {
               onRequestSearch={() => {
                 this.filterSearch();
               }}
+              onCancelSearch={() => {
+                this.setState({ filter: "" });
+              }}
             ></SearchBar>
             <GridList
               className={classes.root}
