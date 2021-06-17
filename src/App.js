@@ -224,7 +224,12 @@ class App extends Component {
                           boxShadow={this.state.shadow}
                           onMouseEnter={this.hover}
                           onMouseLeave={this.exitHover}
-                          onClick={this.openModal}
+                          onClick={() => {
+                            this.openModal();
+                            this.setState({
+                              itemId: this.state.items.indexOf(item),
+                            });
+                          }}
                           key={item.id.value}
                         >
                           <div>
@@ -281,8 +286,8 @@ class App extends Component {
                     />
                   </Avatar>
                   <Typography style={{ textAlign: "center", fontSize: 30 }}>
-                    {this.state.items[this.state.itemId].first}{" "}
-                    {this.state.items[this.state.itemId].last}
+                    {this.state.items[this.state.itemId].name.first}{" "}
+                    {this.state.items[this.state.itemId].name.last}
                   </Typography>
                   <Typography style={{ textAlign: "center", fontSize: 20 }}>
                     Birthday: {this.state.items[this.state.itemId].dob.date}
