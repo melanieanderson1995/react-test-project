@@ -14,9 +14,12 @@ import {
   CardContent,
   CssBaseline,
   GridListTile,
+  Button,
+  IconButton,
 } from "@material-ui/core";
 import MuiListItem from "@material-ui/core/ListItem";
-
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import React, { Component, useEffect } from "react";
 import Header from "../src/components/header";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -63,8 +66,6 @@ class App extends Component {
 
   openModal = (itemId) => {
     this.setState({ open: true });
-    let index = this.state.items.findIndex(itemId);
-    this.setState({ itemId: index });
   };
 
   closeModal = () => {
@@ -254,6 +255,13 @@ class App extends Component {
               onClose={this.closeModal}
               style={{ maxWidth: 500, outline: 0 }}
               outline={0}
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translateY(-25%)",
+                transform: "translateX(-50%)",
+              }}
             >
               <div>
                 <Card
@@ -266,28 +274,58 @@ class App extends Component {
                     padding: 20,
                   }}
                 >
+                  <IconButton></IconButton>
                   <Avatar style={{ width: 100, height: 100 }}>
-                    <img src={this.state.items[0].picture.large} />
+                    <img
+                      src={this.state.items[this.state.itemId].picture.large}
+                    />
                   </Avatar>
                   <Typography style={{ textAlign: "center", fontSize: 30 }}>
-                    {this.state.items[0].first} {this.state.items[0].last}
+                    {this.state.items[this.state.itemId].first}{" "}
+                    {this.state.items[this.state.itemId].last}
                   </Typography>
                   <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    Birthday: {this.state.items[0].dob.date}
+                    Birthday: {this.state.items[this.state.itemId].dob.date}
                   </Typography>
                   <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    {this.state.items[0].email}
+                    {this.state.items[this.state.itemId].email}
                   </Typography>
                   <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    {this.state.items[0].cell}
+                    {this.state.items[this.state.itemId].cell}
                   </Typography>
                   <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    {this.state.items[0].location.street.number}{" "}
-                    {this.state.items[0].location.street.name},{" "}
-                    {this.state.items[0].location.city},{" "}
-                    {this.state.items[0].location.state},{" "}
-                    {this.state.items[0].location.postcode}
+                    {this.state.items[this.state.itemId].location.street.number}{" "}
+                    {this.state.items[this.state.itemId].location.street.name},{" "}
+                    {this.state.items[this.state.itemId].location.city},{" "}
+                    {this.state.items[this.state.itemId].location.state},{" "}
+                    {this.state.items[this.state.itemId].location.postcode}
                   </Typography>
+                  <div style={{ flex: 1, justifyContent: "space-between" }}>
+                    {!this.state.itemId == 0 && (
+                      <IconButton
+                        style={{ float: "left", color: "#3E92CC" }}
+                        onClick={() => {
+                          this.setState({
+                            itemId: this.state.itemId - 1,
+                          });
+                        }}
+                      >
+                        <ArrowBackIcon />
+                      </IconButton>
+                    )}
+                    {!(this.state.itemId == this.state.items.length - 1) && (
+                      <IconButton
+                        style={{ float: "right", color: "#3E92CC" }}
+                        onClick={() => {
+                          this.setState({
+                            itemId: this.state.itemId + 1,
+                          });
+                        }}
+                      >
+                        <ArrowForwardIcon />
+                      </IconButton>
+                    )}
+                  </div>
                 </Card>
               </div>
             </Modal>
