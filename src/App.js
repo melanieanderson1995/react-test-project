@@ -16,10 +16,12 @@ import {
   GridListTile,
   Button,
   IconButton,
+  Divider,
 } from "@material-ui/core";
 import MuiListItem from "@material-ui/core/ListItem";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import CloseIcon from "@material-ui/icons/Close";
 import React, { Component, useEffect } from "react";
 import Header from "../src/components/header";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -27,6 +29,8 @@ import SearchBar from "material-ui-search-bar";
 
 const styles = (theme) => ({
   root: {},
+
+  infoText: {},
 });
 
 const ListItem = withStyles({
@@ -78,6 +82,26 @@ class App extends Component {
 
   exitHover = () => {
     this.setState({ shadow: 1 });
+  };
+
+  getDate = (date) => {
+    var months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const iso = new Date(date);
+    let monthName = months[iso.getMonth()];
+    return monthName + " " + iso.getDate() + ", " + iso.getFullYear();
   };
 
   componentDidMount() {
@@ -138,7 +162,7 @@ class App extends Component {
             >
               <SearchBar
                 style={{
-                  margin: 30,
+                  marginBottom: 15,
                   maxWidth: 300,
                   flex: 1,
                   backgroundColor: "#F0F0F0",
@@ -174,7 +198,7 @@ class App extends Component {
                               backgroundColor: "#f0f0f0",
                               margin: 5,
                               borderRadius: 20,
-                              maxWidth: 350,
+                              maxWidth: 325,
                             }}
                             alignItems="center"
                             justifyContent="center"
@@ -183,7 +207,13 @@ class App extends Component {
                             boxShadow={this.state.shadow}
                             onMouseEnter={this.hover}
                             onMouseLeave={this.exitHover}
-                            onClick={this.openModal}
+                            onClick={() => {
+                              this.openModal();
+                              this.setState({
+                                itemId: this.state.items.indexOf(item),
+                              });
+                            }}
+                            key={item.id.value}
                           >
                             <div>
                               <Avatar style={{ width: 100, height: 100 }}>
@@ -215,7 +245,7 @@ class App extends Component {
                             backgroundColor: "#f0f0f0",
                             margin: 5,
                             borderRadius: 20,
-                            maxWidth: 300,
+                            maxWidth: 325,
                           }}
                           alignItems="center"
                           justifyContent="center"
@@ -262,10 +292,8 @@ class App extends Component {
               outline={0}
               style={{
                 position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: "translateY(-25%)",
-                transform: "translateX(-50%)",
+                flex: 1,
+                top: "25%",
               }}
             >
               <div>
@@ -274,38 +302,65 @@ class App extends Component {
                     maxWidth: 500,
                     justifyContent: "center",
                     alignItems: "center",
+                    alignContent: "center",
                     backgroundColor: "#F0F0F0",
                     borderRadius: 20,
                     padding: 20,
+                    left: "50%",
+                    top: "50%",
+                    bottom: "50%",
+                    transform: "translateY(-50%)",
+                    transform: "translateX(50%)",
+                    flex: 1,
                   }}
                 >
-                  <IconButton></IconButton>
-                  <Avatar style={{ width: 100, height: 100 }}>
+                  <IconButton
+                    style={{ float: "right", color: "#3E92CC" }}
+                    onClick={() => {
+                      this.closeModal();
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                  <Avatar
+                    style={{ width: 100, height: 100, alignItems: "center" }}
+                  >
                     <img
                       src={this.state.items[this.state.itemId].picture.large}
                     />
                   </Avatar>
-                  <Typography style={{ textAlign: "center", fontSize: 30 }}>
-                    {this.state.items[this.state.itemId].name.first}{" "}
-                    {this.state.items[this.state.itemId].name.last}
-                  </Typography>
-                  <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    Birthday: {this.state.items[this.state.itemId].dob.date}
-                  </Typography>
-                  <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    {this.state.items[this.state.itemId].email}
-                  </Typography>
-                  <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    {this.state.items[this.state.itemId].cell}
-                  </Typography>
-                  <Typography style={{ textAlign: "center", fontSize: 20 }}>
-                    {this.state.items[this.state.itemId].location.street.number}{" "}
-                    {this.state.items[this.state.itemId].location.street.name},{" "}
-                    {this.state.items[this.state.itemId].location.city},{" "}
-                    {this.state.items[this.state.itemId].location.state},{" "}
-                    {this.state.items[this.state.itemId].location.postcode}
-                  </Typography>
-                  <div style={{ flex: 1, justifyContent: "space-between" }}>
+                  <div style={{ padding: 10 }}>
+                    <Typography style={{ textAlign: "center", fontSize: 30 }}>
+                      {this.state.items[this.state.itemId].name.first}{" "}
+                      {this.state.items[this.state.itemId].name.last}
+                    </Typography>
+                    <Typography style={{ textAlign: "center", fontSize: 20 }}>
+                      Born:{" "}
+                      {this.getDate(
+                        this.state.items[this.state.itemId].dob.date
+                      )}
+                    </Typography>
+                    <Typography style={{ textAlign: "center", fontSize: 20 }}>
+                      {
+                        this.state.items[this.state.itemId].location.street
+                          .number
+                      }{" "}
+                      {this.state.items[this.state.itemId].location.street.name}
+                      , {this.state.items[this.state.itemId].location.city},{" "}
+                      {this.state.items[this.state.itemId].location.state},{" "}
+                      {this.state.items[this.state.itemId].location.postcode}
+                    </Typography>
+                  </div>
+                  <Divider variant="middle" />
+                  <div style={{ padding: 10 }}>
+                    <Typography style={{ textAlign: "center", fontSize: 20 }}>
+                      {this.state.items[this.state.itemId].email}
+                    </Typography>
+                    <Typography style={{ textAlign: "center", fontSize: 20 }}>
+                      {this.state.items[this.state.itemId].cell}
+                    </Typography>
+                  </div>
+                  <div style={{ flex: 1 }}>
                     {!this.state.itemId == 0 && (
                       <IconButton
                         style={{ float: "left", color: "#3E92CC" }}
